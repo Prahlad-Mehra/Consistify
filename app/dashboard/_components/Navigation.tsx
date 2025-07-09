@@ -1,14 +1,29 @@
 'use client'
-import { ChevronLeft, MenuIcon ,PlusCircle} from "lucide-react"
+
+import { ChevronLeft, MenuIcon ,PlusCircle,Home,Inbox,Component} from "lucide-react"
 import { usePathname } from "next/navigation"
 import { ElementRef,useRef,useState,useEffect } from "react"
 import {useMediaQuery} from "usehooks-ts"
+import { UserProfile } from "@clerk/nextjs"
 
 import { cn } from "@/lib/utils"
-import { use } from "react"
-import { is } from "date-fns/locale"
-import path from "path"
 import UserItems from "./UserItems"
+import SideItems from "./SideItems"
+import WrapDialog from "./WrapDialog"
+
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 const Navigation = () => {
   const pathname=usePathname() || ""
@@ -19,6 +34,7 @@ const Navigation = () => {
   const navbarRef=useRef<ElementRef<"div">>(null)
   const [isResetting,setIsResetting]= useState(false)
   const [isCollapsed,setIsCollapsed]= useState(isMobile)
+  const [doc,setNewDoc] = useState<string[]>(["Document 1", "Document 2", "Document 3"]);
 
   useEffect(() => {
     if(isMobile){
@@ -96,6 +112,16 @@ const Navigation = () => {
     }
   }
 
+  // Helper to handle SideItems click
+  const handleSideItemClick = (action: () => void) => {
+    return () => {
+      action();
+      if (isMobile) {
+        collapse();
+      }
+    };
+  };
+
   return (
     <>
         <aside
@@ -112,18 +138,37 @@ const Navigation = () => {
             )}>
                 <ChevronLeft className="cursor-pointer h-6 w-6"/>
             </div>
-          <div>
+          <div className="border-b-2 border-b-neutral-300">
             <UserItems />
           </div>
-          <div className="mt-2">
-            <div className="cursor-pointer flex pl-2 py-1 hover:bg-neutral-300" >
-              <PlusCircle className="h-4 w-4 mr-2 mt-1 items-center" />
-              <p>Create a note</p>
-            </div>
-            <div className="cursor-pointer flex ml-2 mb-2" >
-              <PlusCircle className="h-4 w-4 mr-2 mt-1 items-center" />
-              <p>Create a note</p>
-            </div>
+          <div className="ml-2 mr-2 mb-3 border-b-2 border-b-neutral-300 py-1">
+            <WrapDialog>
+              <SideItems
+                icon={PlusCircle}
+                label="Create a note"
+                onClick={handleSideItemClick(() => console.log("Create a note clicked"))}
+              />
+            </WrapDialog>
+            <SideItems
+              icon={Home}
+              label="Home"
+              href="/dashboard/home"
+            />
+            <SideItems
+              icon={Inbox}
+              label="Inbox"
+              href="/dashboard/inbox"
+            />
+          </div>
+          <div>
+            {doc.map((document, index) => (
+              <SideItems
+                key={index}
+                icon={Component}
+                label={`${document}`}
+                href={`/dashboard/document-${index + 1}`}
+              />
+            ))}
           </div>
           <div
           onMouseDown={handleMouseDown}
