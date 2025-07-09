@@ -11,7 +11,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
@@ -23,9 +22,9 @@ function UserItems() {
   return (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
-            <div role="button" className="cursor-pointer flex items-center text-sm p-3 w-full hover:bg-primary/5">
+            <div role="button" className="cursor-pointer flex items-center text-sm px-3 py-2 w-full hover:bg-primary/5">
                 <div className="gap-x-2 flex items-center max-w-[150px]">
-                    <Avatar className="w-8 h-8 ">
+                    <Avatar className="w-7 h-7 ">
                         <AvatarImage
                             src={user?.imageUrl || "/default-avatar.png"}
                             alt={user?.firstName || "User Avatar"}

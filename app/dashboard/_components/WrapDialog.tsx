@@ -1,10 +1,7 @@
-'use client';
+'use client'
 
-import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
-
 import {
   Dialog,
   DialogClose,
@@ -18,28 +15,17 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const Page = () => {
+interface WrapDialogProps {
+    children?: React.ReactNode;
+}
 
+function WrapDialog({children}: WrapDialogProps) {
   return (
-        <>
-        <div className="flex flex-col items-center justify-center h-screen space-y-4">
-          <Image 
-            src="/MessyDoodle.png"
-            height={300}
-            width={300}
-            alt="Empty"
-          />
-          <h2 className="text-large font-medium">
-            Welcome to your dashboard
-            <br />
-          </h2>
-          <Dialog>
+    <>
+        <Dialog>
             <form>
               <DialogTrigger asChild>
-                <Button className="cursor-pointer">
-                  <PlusCircle className="h-4 w-4 mr-2" />
-                  Create a note
-                </Button>
+                {children}
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -65,9 +51,8 @@ const Page = () => {
               </DialogContent>
             </form>
           </Dialog>
-        </div>
-        </>
-        ) 
-};
+    </>
+  )
+}
 
-export default Page;
+export default WrapDialog
