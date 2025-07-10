@@ -17,8 +17,21 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useState } from "react";
+import useTodoStore from "@/store/useTodoStore";
 
 const Page = () => {
+  const [noteName, setNoteName] = useState("");
+  const addNote = useTodoStore((state) => state.addNote);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!noteName.trim()) return;
+    addNote(noteName);
+    toast.success("Note created successfully!");
+    setNoteName("");
+    // Dialog will close automatically due to DialogClose
+  };
 
   return (
         <>
@@ -34,7 +47,6 @@ const Page = () => {
             <br />
           </h2>
           <Dialog>
-            <form>
               <DialogTrigger asChild>
                 <Button className="cursor-pointer">
                   <PlusCircle className="h-4 w-4 mr-2" />
@@ -42,6 +54,7 @@ const Page = () => {
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
+                <form onSubmit={handleSubmit}>
                 <DialogHeader>
                   <DialogTitle>Create Note</DialogTitle>
                   <DialogDescription>
@@ -52,18 +65,24 @@ const Page = () => {
                 <div className="grid gap-4">
                   <div className="grid gap-3">
                     <Label htmlFor="name-1">Name</Label>
-                    <Input id="name-1" name="name" placeholder="My Work" />
+                    <Input 
+                      id="name-1"
+                      name="name"
+                      placeholder="My Work"
+                      value={noteName}
+                      onChange={(e) => setNoteName(e.target.value)}
+                    />
                   </div>
                 </div>
                 <DialogFooter>
                   <DialogClose asChild>
                     <Button className="cursor-pointer" variant="outline">Cancel</Button>
                   </DialogClose>
-                  <DialogClose asChild><Button className="cursor-pointer" type="submit" onClick={()=> toast.success("Note created successfully!")}>
+                  <DialogClose asChild><Button disabled={!noteName.trim()} className="cursor-pointer" type="submit">
                     Create</Button></DialogClose>
                 </DialogFooter>
+                </form>
               </DialogContent>
-            </form>
           </Dialog>
         </div>
         </>

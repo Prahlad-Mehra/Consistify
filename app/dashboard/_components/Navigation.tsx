@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronLeft, MenuIcon ,PlusCircle,Home,Inbox,Component} from "lucide-react"
+import { ChevronLeft, MenuIcon ,PlusCircle,Home,Inbox} from "lucide-react"
 import { usePathname } from "next/navigation"
 import { ElementRef,useRef,useState,useEffect } from "react"
 import {useMediaQuery} from "usehooks-ts"
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import SideNotes from "./SideNotes"
 
 const Navigation = () => {
   const pathname=usePathname() || ""
@@ -157,18 +158,11 @@ const Navigation = () => {
             <SideItems
               icon={Inbox}
               label="Inbox"
-              href="/dashboard/inbox"
+              href="/dashboard/Inbox"
             />
           </div>
           <div>
-            {doc.map((document, index) => (
-              <SideItems
-                key={index}
-                icon={Component}
-                label={`${document}`}
-                href={`/dashboard/document-${index + 1}`}
-              />
-            ))}
+            <SideNotes />
           </div>
           <div
           onMouseDown={handleMouseDown}
