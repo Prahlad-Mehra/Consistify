@@ -3,6 +3,9 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useTodoStore from "@/store/useTodoStore";
+import { useMediaQuery } from "usehooks-ts";
+import { cn } from "@/lib/utils";
+import RealCalender from "../_components/RealCalender";
 
 export default function Page() {
   const pathname = usePathname() || "";
@@ -29,14 +32,18 @@ export default function Page() {
   }
 
   const note = notes.find(note => note.id === slug);
+  const isMobile = useMediaQuery("(max-width: 768px)") ?? false;
 
   return (
-    <>
-      <div className="flex justify-center mt-20">
-        <pre>
+    <div className="mt-15 mx-10">
+      <RealCalender id={`${note?.id}`}/>
+      <div className="flex justify-center">
+        <pre className={cn(isMobile && "text-[10px]")}>
+          <h1 className="text-xl font-sans font-extrabold">{note?.name}</h1>
         {JSON.stringify(note, null, 2)}
       </pre>
       </div>
-    </>
+      
+    </div>
   )
 }

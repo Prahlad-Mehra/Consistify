@@ -4,26 +4,12 @@ import { ChevronLeft, MenuIcon ,PlusCircle,Home,Inbox} from "lucide-react"
 import { usePathname } from "next/navigation"
 import { ElementRef,useRef,useState,useEffect } from "react"
 import {useMediaQuery} from "usehooks-ts"
-import { UserProfile } from "@clerk/nextjs"
 
 import { cn } from "@/lib/utils"
 import UserItems from "./UserItems"
 import SideItems from "./SideItems"
 import WrapDialog from "./WrapDialog"
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import SideNotes from "./SideNotes"
 
 const Navigation = () => {
@@ -35,7 +21,6 @@ const Navigation = () => {
   const navbarRef=useRef<ElementRef<"div">>(null)
   const [isResetting,setIsResetting]= useState(false)
   const [isCollapsed,setIsCollapsed]= useState(isMobile)
-  const [doc,setNewDoc] = useState<string[]>(["Document 1", "Document 2", "Document 3"]);
 
   useEffect(() => {
     if(isMobile){
