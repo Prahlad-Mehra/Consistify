@@ -31,9 +31,7 @@ function RealCalender({id}:calendarProp) {
     <SheetHeader>
       <SheetTitle className="text-2xl text-center">Streak Calendar</SheetTitle>
       <SheetDescription>
-        <h1 className="text-2xl">{id}</h1>
-        <p>This action cannot be undone. This will permanently delete your account
-        and remove your data from our servers.</p>
+        <span className="text-2xl">{id}</span><br/>
       </SheetDescription>
     </SheetHeader>
     <div className={cn(isMobile && "mt-10")}>

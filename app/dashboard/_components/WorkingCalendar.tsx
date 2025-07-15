@@ -1,32 +1,53 @@
 import { Check, Flame, Trophy, Target } from 'lucide-react';
+import useTodoStore from '@/store/useTodoStore';
 
 interface CompletedDay {
   date: string;
 }
 
-const WorkingCalendar:React.FC= ()=> {
-    const currentDate:string='2025-06-30'
-    const completedDays:CompletedDay[] =[
-      { date: '2025-06-04' },
-      { date: '2025-06-05' },
-      { date: '2025-06-06' },
-      { date: '2025-06-07' },
-      { date: '2025-06-08' },
-      { date: '2025-06-10' },
-      { date: '2025-06-11' },
-      { date: '2025-06-12' },
-      { date: '2025-06-13' },
-      { date: '2025-06-14' },
-      { date: '2025-06-15' },
-    ]
+interface dates{
+    date: String
+}
 
-    const completedDaysSet= new Set(completedDays.map(day => day.date))
+interface Calendar{
+    id:string;
+    CompletedDates:dates[]
+}
+
+const WorkingCalendar:React.FC= ()=> {
+    const id:(string | undefined)= useTodoStore(state => state.Calendar.find(item => item.id==="Inbox"))?.id;
+    const completedDays:(dates[] | undefined)=useTodoStore(state => state.Calendar.find(item => item.id==='Inbox'))?.CompletedDates;
+    const NowDate:Date=new Date()
+    const currentDate:string=NowDate.toISOString().split('T')[0];
+
+    const completedDaysSet= new Set(completedDays!.map(day => day.date))
     const calendarDays= []
 
     for(let day=1;day<=30;day++){
         calendarDays.push(day)
     }
     const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+    const MonthNames=["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"]
+
+    function streak():number{
+      if (!completedDays || completedDays.length === 0) {
+        return 0;
+      }
+
+      const date=new Date()
+      let today=`${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`
+
+      let a=0;
+      let i=completedDays!.length -1;
+      while(i>=0 && completedDays![i].date===today){
+        a++;
+        today=`${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, '0')}-${(date.getDate() -a).toString().padStart(2, '0')}`
+        i--;
+      }
+      console.log(a)
+      return a;
+    }
+    let Streak:number=streak()
 
     return (
         <div className="w-90 lg:w-80 bg-white rounded-xl shadow-2xl border border-gray-200 p-4 mx-5">
@@ -35,7 +56,7 @@ const WorkingCalendar:React.FC= ()=> {
             <h2 className="text-lg font-semibold text-gray-800">Daily Streak</h2>
             <div className="flex items-center space-x-1 text-emerald-600">
               <Flame className="lg:w-4 lg:h-4" />
-              <span className="text-sm font-medium">0</span>
+              <span className="text-sm font-medium">{Streak}</span>
             </div>
           </div>
     
@@ -46,7 +67,7 @@ const WorkingCalendar:React.FC= ()=> {
                 <Flame className="lg:w-3 lg:h-3 text-emerald-600" />
               </div>
               <p className="text-xs text-emerald-600 font-medium">Current</p>
-              <p className="text-sm font-bold text-emerald-700">0</p>
+              <p className="text-sm font-bold text-emerald-700">{Streak}</p>
             </div>
             
             <div className="text-center p-2 bg-blue-50 rounded-lg">
@@ -54,7 +75,7 @@ const WorkingCalendar:React.FC= ()=> {
                 <Trophy className="lg:w-3 lg:h-3 text-blue-600" />
               </div>
               <p className="text-xs text-blue-600 font-medium">Best</p>
-              <p className="text-sm font-bold text-blue-700">26</p>
+              <p className="text-sm font-bold text-blue-700">{Streak}</p>
             </div>
             
             <div className="text-center p-2 bg-purple-50 rounded-lg">
@@ -62,14 +83,14 @@ const WorkingCalendar:React.FC= ()=> {
                 <Target className="lg:w-3 lg:h-3 text-purple-600" />
               </div>
               <p className="text-xs text-purple-600 font-medium">Total</p>
-              <p className="text-sm font-bold text-purple-700">65</p>
+              <p className="text-sm font-bold text-purple-700">{Streak}</p>
             </div>
           </div>
     
           {/* Calendar Navigation */}
           <div className="flex items-center justify-center mb-3">
             <h3 className="text-sm font-medium text-gray-700">
-              June 2025
+              {MonthNames[NowDate.getMonth()]} {NowDate.getFullYear()}
             </h3>
           </div>
     
@@ -91,7 +112,7 @@ const WorkingCalendar:React.FC= ()=> {
                   return <div key={index} className="w-8 h-8" />;
                 }
     
-                const dateString = `${2025}-${String(5 + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dateString = `${2025}-${String(NowDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const isCompleted = completedDaysSet.has(dateString);
                 const isToday = dateString === currentDate;
     

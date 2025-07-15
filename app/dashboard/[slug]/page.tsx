@@ -6,6 +6,7 @@ import useTodoStore from "@/store/useTodoStore";
 import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import RealCalender from "../_components/RealCalender";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const pathname = usePathname() || "";
@@ -34,6 +35,10 @@ export default function Page() {
   const note = notes.find(note => note.id === slug);
   const isMobile = useMediaQuery("(max-width: 768px)") ?? false;
 
+  function done(){
+    
+  }
+
   return (
     <div className="mt-15 mx-10">
       <RealCalender id={`${note?.id}`}/>
@@ -43,7 +48,7 @@ export default function Page() {
         {JSON.stringify(note, null, 2)}
       </pre>
       </div>
-      
+      <Button className="cursor-pointer" onClick={done}>Done</Button>
     </div>
   )
 }

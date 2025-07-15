@@ -5,19 +5,24 @@ interface Task {
     id: string;
     text: string;
     completed: boolean;
-    createdAt: string;
-    updatedAt: string;
 }
 
 interface Note {
     id: string;
     name: string;
-    createdAt: string;
-    updatedAt: string;
     todos: Task[];
+}
+interface dates{
+    date: String
+}
+
+interface Calendar{
+    id:string;
+    CompletedDates:dates[]
 }
 
 interface TodoStore {
+    Calendar: Calendar[];
     notes: Note[];
     loading: boolean;
     error: string | null;
@@ -41,56 +46,52 @@ interface TodoStore {
 }
 
 const useTodoStore = create<TodoStore>((set, get) => ({
+    Calendar:[
+        {
+            id:'Inbox',
+            CompletedDates:[
+                {date:'2025-07-12'},
+                {date:'2025-07-13'},
+                {date:'2025-07-14'},
+            ]
+        }
+    ],
     notes: [
         {
             id: 'Inbox',
             name: 'Inbox',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
             todos: [
                 {
                     id: '1',
                     text: 'Sample Todo',
                     completed: false,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
                 }
             ]
         },
         {
             id: 'Today',
             name: 'Today',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
             todos: [
                 {
                     id: '2',
                     text: 'Complete the project',
                     completed: false,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
                 },
                 {
                     id: '3',
                     text: 'Attend the meeting',
                     completed: true,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
                 }
             ]
         },
         {
             id: 'Upcoming',
             name: 'Upcoming',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
             todos: [
                 {
                     id: '4',
                     text: 'Plan the next sprint',
                     completed: false,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
                 }
             ]
         }
@@ -111,6 +112,14 @@ const useTodoStore = create<TodoStore>((set, get) => ({
         }
     },
 
+    addDate: (day:String) =>{
+        set(state => ({
+            //this is not done , complete it
+            //---------------------complete this shit asap as fast as possible
+
+            //------------!!!!!!!!!!!!-------------------------------
+        }))
+    },
     // Add new note
     addNote: async (name) => {
         set({ loading: true, error: null });
@@ -118,22 +127,16 @@ const useTodoStore = create<TodoStore>((set, get) => ({
             const add={
             id: `${name}`,
             name: `${name}`,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
             todos: [
                 {
                     id: '2',
                     text: 'Complete the newly added project',
                     completed: false,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
                 },
                 {
                     id: '3',
                     text: 'Attend the newly added meeting',
                     completed: true,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
                 }
             ]
         }
