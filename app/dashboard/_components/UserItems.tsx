@@ -1,6 +1,6 @@
 'use client'
 
-import { SignOutButton } from "@clerk/nextjs"
+import { SignOutButton} from "@clerk/nextjs"
 import { useUser } from "@clerk/nextjs"
 import { ChevronsLeftRight } from "lucide-react"
 import {

@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronLeft, MenuIcon ,PlusCircle,Home,Inbox} from "lucide-react"
+import { ChevronLeft, MenuIcon ,PlusCircle,Home,Inbox, LogOut, Settings} from "lucide-react"
 import { usePathname } from "next/navigation"
 import { ElementRef,useRef,useState,useEffect } from "react"
 import {useMediaQuery} from "usehooks-ts"
@@ -11,6 +11,8 @@ import SideItems from "./SideItems"
 import WrapDialog from "./WrapDialog"
 
 import SideNotes from "./SideNotes"
+import SidebarFooter from "./SidebarFooter"
+import { SignOutButton } from "@clerk/nextjs"
 
 const Navigation = () => {
   const pathname=usePathname() || ""
@@ -146,8 +148,23 @@ const Navigation = () => {
               href="/dashboard/Inbox"
             />
           </div>
-          <div>
+          <div className="overflow-y-auto">
             <SideNotes />
+          </div>
+          <div className="border-t-2 absolute bottom-0 h-10 w-full bg-secondary flex items-center justify-between">
+            <SideItems
+              icon={Settings}
+              label="Settings"
+              href="/dashboard/Settings"
+            /> 
+            <SignOutButton>
+              <LogOut className="cursor-pointer rounded-sm shrink-0 w-6 h-6 mr-2 text-muted-foreground hover:bg-primary/8 p-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }} />
+            </SignOutButton>
+
           </div>
           <div
           onMouseDown={handleMouseDown}

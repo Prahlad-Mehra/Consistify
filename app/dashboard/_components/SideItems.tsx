@@ -2,7 +2,6 @@
 
 import { LucideIcon , Trash2} from "lucide-react";
 import Link from "next/link";
-import { toast } from "sonner";
 import useTodoStore from "../../../store/useTodoStore"; // Adjust the import path as necessary
 
 interface SideItemsProps {
