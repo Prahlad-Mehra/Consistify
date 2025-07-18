@@ -7,6 +7,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import RealCalender from "../_components/RealCalender";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export default function Page() {
   const pathname = usePathname() || "";
@@ -34,9 +35,13 @@ export default function Page() {
 
   const note = notes.find(note => note.id === slug);
   const isMobile = useMediaQuery("(max-width: 768px)") ?? false;
+  const addDate= useTodoStore(state => state.addDate)
+  const id:(string | undefined)= useTodoStore(state => state.Calendar.find(item => item.id==="Inbox"))?.id;
 
   function done(){
-    
+    const today=new Date().toISOString().split('T')[0]
+    addDate(today,id!)
+    toast.success("Congratulation on completing today's task")
   }
 
   return (

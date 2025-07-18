@@ -1,3 +1,4 @@
+import { Calendar } from 'lucide-react';
 import { create } from 'zustand';
 
 // Updated interfaces to match Prisma schema
@@ -31,6 +32,7 @@ interface TodoStore {
     fetchNotes: () => Promise<void>;
     
     // Note operations
+    addDate: (day:String,id:String) => void;
     addNote: (name: string) => Promise<void>;
     updateNoteName: (noteId: string, newName: string) => Promise<void>;
     deleteNote: (noteId: string) => Promise<void>;
@@ -112,12 +114,18 @@ const useTodoStore = create<TodoStore>((set, get) => ({
         }
     },
 
-    addDate: (day:String) =>{
+    addDate: (day:String,id:String) =>{
         set(state => ({
-            //this is not done , complete it
-            //---------------------complete this shit asap as fast as possible
-
-            //------------!!!!!!!!!!!!-------------------------------
+            Calendar: state.Calendar.map(item =>
+                item.id===id
+                ?{
+                    ...item,
+                    CompletedDates:[
+                        ...item.CompletedDates,
+                        {date:`${day}`}
+                    ]
+                }:item
+            )
         }))
     },
     // Add new note
