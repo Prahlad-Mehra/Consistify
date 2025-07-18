@@ -14,7 +14,7 @@ interface Note {
     todos: Task[];
 }
 interface dates{
-    date: String
+    date: string
 }
 
 interface Calendar{
@@ -32,7 +32,7 @@ interface TodoStore {
     fetchNotes: () => Promise<void>;
     
     // Note operations
-    addDate: (day:String,id:String) => void;
+    addDate: (day:string,id:string) => void;
     addNote: (name: string) => Promise<void>;
     updateNoteName: (noteId: string, newName: string) => Promise<void>;
     deleteNote: (noteId: string) => Promise<void>;
@@ -114,7 +114,7 @@ const useTodoStore = create<TodoStore>((set, get) => ({
         }
     },
 
-    addDate: (day:String,id:String) =>{
+    addDate: (day:string,id:string) =>{
         set(state => ({
             Calendar: state.Calendar.map(item =>
                 item.id===id
