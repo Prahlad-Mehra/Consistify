@@ -1,17 +1,8 @@
 import { Check, Flame, Trophy, Target } from 'lucide-react';
 import useTodoStore from '@/store/useTodoStore';
 
-interface CompletedDay {
-  date: string;
-}
-
 interface dates{
     date: String
-}
-
-interface Calendar{
-    id:string;
-    CompletedDates:dates[]
 }
 
 const WorkingCalendar:React.FC= ()=> {

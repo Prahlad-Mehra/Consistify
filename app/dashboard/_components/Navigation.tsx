@@ -142,11 +142,6 @@ const Navigation = () => {
               label="Home"
               href="/dashboard/home"
             />
-            <SideItems
-              icon={Inbox}
-              label="Inbox"
-              href="/dashboard/Inbox"
-            />
           </div>
           <div className="overflow-y-auto">
             <SideNotes />
