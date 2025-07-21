@@ -35,7 +35,7 @@ function RealCalender({id}:calendarProp) {
       </SheetDescription>
     </SheetHeader>
     <div className={cn(isMobile && "mt-10")}>
-      <WorkingCalendar />
+      <WorkingCalendar id={id} />
     </div>
   </SheetContent>
 </Sheet>

@@ -1,4 +1,3 @@
-import { Calendar } from 'lucide-react';
 import { create } from 'zustand';
 
 // Updated interfaces to match Prisma schema
@@ -17,13 +16,13 @@ interface dates{
     date: string
 }
 
-interface Calendar{
+interface CalendarDates{
     id:string;
     CompletedDates:dates[]
 }
 
 interface TodoStore {
-    Calendar: Calendar[];
+    Calendar: CalendarDates[];
     notes: Note[];
     loading: boolean;
     error: string | null;
@@ -50,11 +49,15 @@ interface TodoStore {
 const useTodoStore = create<TodoStore>((set, get) => ({
     Calendar:[
         {
-            id:'Inbox',
+            id:'Upcoming',
             CompletedDates:[
-                {date:'2025-07-12'},
-                {date:'2025-07-13'},
-                {date:'2025-07-14'},
+                {date:'2025-07-01'}
+            ]
+        },
+        {
+            id:'Today',
+            CompletedDates:[
+                {date:'2025-07-01'}
             ]
         }
     ],
@@ -114,17 +117,23 @@ const useTodoStore = create<TodoStore>((set, get) => ({
         }
     },
 
-    addDate: (day:string,id:string) =>{
+    addDate: (day:string,givenid:string) =>{
         set(state => ({
             Calendar: state.Calendar.map(item =>
-                item.id===id
-                ?{
-                    ...item,
-                    CompletedDates:[
-                        ...item.CompletedDates,
-                        {date:`${day}`}
-                    ]
-                }:item
+                // item.id===id
+                // ?{
+                //     ...item,
+                //     CompletedDates:[
+                //         ...item.CompletedDates,
+                //         {date:`${day}`}
+                //     ]
+                // }:item
+                {
+                    if(item.id===givenid){
+                        item.CompletedDates.push({date:`${day}`})
+                    }
+                    return item
+                }
             )
         }))
     },

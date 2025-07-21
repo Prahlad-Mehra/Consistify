@@ -5,9 +5,13 @@ interface dates{
     date: String
 }
 
-const WorkingCalendar:React.FC= ()=> {
-    const id:(string | undefined)= useTodoStore(state => state.Calendar.find(item => item.id==="Inbox"))?.id;
-    const completedDays:(dates[] | undefined)=useTodoStore(state => state.Calendar.find(item => item.id==='Inbox'))?.CompletedDates;
+interface WorkingCalendarProps {
+    id: string;
+}
+
+const WorkingCalendar = ({id}:WorkingCalendarProps)=> {
+    // const id:(string | undefined)= useTodoStore(state => state.Calendar.find(item => item.id==="Inbox"))?.id;
+    const completedDays:(dates[] | undefined)=useTodoStore(state => state.Calendar.find(item => item.id===id))?.CompletedDates;
     const NowDate:Date=new Date()
     const currentDate:string=NowDate.toISOString().split('T')[0];
 
