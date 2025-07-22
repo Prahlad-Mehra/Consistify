@@ -1,10 +1,11 @@
-import { auth } from "@clerk/nextjs/server"
+import { auth , currentUser} from "@clerk/nextjs/server"
 import {NextResponse,NextRequest} from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function GET(req:NextRequest){//this should be a POST request!!!! REMEMBER
     try{
         const { userId } = await auth();
+        const reqCurrentUser = await currentUser();
 
         if(!userId){
             return NextResponse.json(
@@ -13,10 +14,16 @@ export async function GET(req:NextRequest){//this should be a POST request!!!! R
             );
         }
 
+        if (!reqCurrentUser || !reqCurrentUser.firstName) {
+            return NextResponse.json(
+                { error: 'User information incomplete' },
+                { status: 400 }
+            );
+        }
         console.log(`🔎 Checking user: ${userId}`)
 
         const user=await prisma.user.findUnique({
-            where:{ clerkID: userId},
+            where:{ clerkID: userId, userName: reqCurrentUser.firstName },
             include:{
                 notes:{
                     include:{
@@ -31,7 +38,8 @@ export async function GET(req:NextRequest){//this should be a POST request!!!! R
             console.log(`Creating new user : ${userId}`)
             const newUser= await prisma.user.create({
                 data:{
-                    clerkID:userId
+                    clerkID:userId,
+                    userName:reqCurrentUser.firstName
                 }
             })
             console.log(`✅ created user ${userId}`)

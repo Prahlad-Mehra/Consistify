@@ -15,14 +15,15 @@ datasource db {
 }
 
 model User {
-  id      Int    @id @default(autoincrement())
-  clerkID String @unique
-  notes   Note[]
+  id       Int    @id @default(autoincrement())
+  userName String
+  clerkID  String @unique
+  notes    Note[]
 }
 
 model Note {
   id                     Int                     @id @default(autoincrement())
-  user                   User                    @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user                   User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                 Int //this is the id from the User model not the ClerkId from the user model
   title                  String
   createdAt              DateTime                @default(now())
@@ -34,7 +35,7 @@ model Todo {
   id           Int      @id @default(autoincrement())
   parentNoteId Int
   name         String
-  note         Note     @relation(fields: [parentNoteId], references: [id],onDelete: Cascade)
+  note         Note     @relation(fields: [parentNoteId], references: [id], onDelete: Cascade)
   createdAt    DateTime @default(now())
   updateAt     String   @default("1999-12-30")
 }
@@ -42,6 +43,6 @@ model Todo {
 model CompletedCalendarDate {
   id         Int    @id @default(autoincrement())
   parentNote Int
-  note       Note   @relation(fields: [parentNote], references: [id],onDelete: Cascade)
+  note       Note   @relation(fields: [parentNote], references: [id], onDelete: Cascade)
   date       String
 }
