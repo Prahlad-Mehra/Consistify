@@ -25,7 +25,7 @@ export async function POST(req:NextRequest){//this should be a POST request!!!RE
         return NextResponse.json(todo,{status:201});
     } catch(error){
         console.error('Error creating todo',error);
-        return NextResponse.json({error:'Internla server error'},{status:500});
+        return NextResponse.json({error:'Internal server error'},{status:500});
     }
 }
 

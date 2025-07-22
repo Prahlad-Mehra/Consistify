@@ -9,7 +9,7 @@ interface Task {
 
 interface Note {
     id: string;
-    name: string;
+    title: string;
     todos: Task[];
 }
 interface dates{
@@ -63,19 +63,8 @@ const useTodoStore = create<TodoStore>((set, get) => ({
     ],
     notes: [
         {
-            id: 'Inbox',
-            name: 'Inbox',
-            todos: [
-                {
-                    id: '1',
-                    text: 'Sample Todo',
-                    completed: false,
-                }
-            ]
-        },
-        {
             id: 'Today',
-            name: 'Today',
+            title: 'Today',
             todos: [
                 {
                     id: '2',
@@ -91,7 +80,7 @@ const useTodoStore = create<TodoStore>((set, get) => ({
         },
         {
             id: 'Upcoming',
-            name: 'Upcoming',
+            title: 'Upcoming',
             todos: [
                 {
                     id: '4',
@@ -143,7 +132,7 @@ const useTodoStore = create<TodoStore>((set, get) => ({
         try {
             const add={
             id: `${name}`,
-            name: `${name}`,
+            title: `${name}`,
             todos: [
                 {
                     id: '2',
@@ -168,7 +157,7 @@ const useTodoStore = create<TodoStore>((set, get) => ({
                 notes: [...state.notes, add], 
                 loading: false 
             }));
-            console.log(get().notes.map(note => note.name))
+            console.log(get().notes.map(note => note.title))
         } catch (error) {
             set({ error: (error as Error).message, loading: false });
         }
@@ -208,7 +197,7 @@ const useTodoStore = create<TodoStore>((set, get) => ({
                 notes: state.notes.filter(note => note.id !== noteId),
                 loading: false
             }));
-            console.log(get().notes.map(note => note.name))
+            console.log(get().notes.map(note => note.title))
         } catch (error) {
             set({ error: (error as Error).message, loading: false });
         }
