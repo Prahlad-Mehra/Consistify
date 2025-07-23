@@ -74,7 +74,7 @@ export async function DELETE(req:NextResponse){
         if(!userId){
             return NextResponse.json({error:'Unauthorized'},{status:401});
         }
-        const {reqParentNoteId,reqName,reqId , updateItToToday}:updateTodo =await req.json();
+        const {reqParentNoteId,reqName,reqId}:updateTodo =await req.json();
         if(!reqParentNoteId || !reqName){
             return NextResponse.json({ error: 'Invalid request!!' }, { status: 400 });
         }

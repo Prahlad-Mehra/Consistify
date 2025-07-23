@@ -11,7 +11,6 @@ import SideItems from "./SideItems"
 import WrapDialog from "./WrapDialog"
 
 import SideNotes from "./SideNotes"
-import SidebarFooter from "./SidebarFooter"
 import { SignOutButton } from "@clerk/nextjs"
 
 const Navigation = () => {

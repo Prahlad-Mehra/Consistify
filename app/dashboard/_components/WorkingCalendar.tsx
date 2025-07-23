@@ -6,12 +6,12 @@ interface dates{
 }
 
 interface WorkingCalendarProps {
-    id: string;
+    id: number;
 }
 
 const WorkingCalendar = ({id}:WorkingCalendarProps)=> {
     // const id:(string | undefined)= useTodoStore(state => state.Calendar.find(item => item.id==="Inbox"))?.id;
-    const completedDays:(dates[] | undefined)=useTodoStore(state => state.Calendar.find(item => item.id===id))?.CompletedDates;
+    const completedDays:(dates[] | undefined)= useTodoStore(state => state.notes.find(item => item.id===id))?.calendarDates;
     const NowDate:Date=new Date()
     const currentDate:string=NowDate.toISOString().split('T')[0];
 

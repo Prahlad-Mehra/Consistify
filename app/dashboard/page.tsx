@@ -17,12 +17,50 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import useTodoStore from "@/store/useTodoStore";
+import { Spinner } from "@/components/ui/spinner";
 
 const Page = () => {
+  const initialData= useTodoStore(state => state.initialData);
+  const setInitialData= useTodoStore(state => state.setInitialData);
+
   const [noteName, setNoteName] = useState("");
   const addNote = useTodoStore((state) => state.addNote);
+  const addFromEnsure= useTodoStore((state) => state.addFromEnsure)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log('fetching ensure start');
+        const response = await fetch('api/user/ensure');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        console.log('fetching ensure done');
+        const result = await response.json();
+        addFromEnsure(result);
+        setInitialData();
+      } catch (error) {
+        console.log('Error fetching data:', error);
+        setInitialData(); // Still set as loaded even on error
+      }
+    };
+    
+    if (!initialData) {
+      fetchData();
+    }
+  }, [initialData, addFromEnsure, setInitialData]);
+
+  if (!initialData) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div>
+          <Spinner size="lg" className="bg-black dark:bg-white"/>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

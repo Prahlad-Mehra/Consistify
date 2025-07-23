@@ -21,8 +21,38 @@ interface CalendarDates{
     parentNote: number;
     date: string
 }
+interface EnsureCalendarDates{
+    id:number;
+    parentNote:number;
+    date: string;
+}
+interface EnsureTodo{
+    id:number;
+    parentNoteId:number;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+}
+interface EnsureNote{
+    id:number;
+    userId:number;
+    title: string;
+    createdAt: string;
+    todos: EnsureTodo[];
+    completedCalendarDates: EnsureCalendarDates[]
+}
+
+interface EnsureObj{
+    id:number;
+    userName: string;
+    clerkID: string;
+    notes:EnsureNote[]
+}
 
 interface TodoStore {
+    id:number;
+    userName: string;
+    clerkID: string;
     notes: Note[];
     loading: boolean;
     error: string | null;
@@ -35,12 +65,48 @@ interface TodoStore {
     // Todo operations
     addTodo: (noteId: number, text: string) => Promise<void>;
     updateTodo: (reqParentNoteId:number ,reqName: string, reqId:number , updateItToToday: string) => Promise<void>;
-    deleteTodo: (noteId: string, todoId: string) => Promise<void>;
+    deleteTodo: (reqParentNoteId:number,reqName: string,reqId:number) => Promise<void>;
+    addFromEnsure : (ensureObj:EnsureObj) => void; //change it to useful type
     // UI helpers
     clearError: () => void;
+    initialData: boolean;
+    setInitialData: ()=> void
 }
 
 const useTodoStore = create<TodoStore>((set, get) => ({
+    initialData:false,
+    setInitialData: ()=>{
+        set((state)=>({
+            initialData: true
+        }));
+    },
+    id:0,
+    userName:'',
+    clerkID:'',
+    addFromEnsure: (ensureObj:EnsureObj) =>{
+        const transformedNotes: Note[] = ensureObj.notes.map(note => ({
+            id: note.id,
+            userId: note.userId,
+            title: note.title,
+            todos: note.todos.map(todo => ({
+              id: todo.id,
+              parentNoteId: todo.parentNoteId,
+              name: todo.name,
+              updateAt: todo.updatedAt,
+            })),
+            calendarDates: note.completedCalendarDates.map(date => ({
+              id: date.id,
+              parentNote: date.parentNote,
+              date: date.date,
+            })),
+        }));
+        set(() =>({
+            id:ensureObj.id,
+            userName:ensureObj.userName,
+            clerkID:ensureObj.clerkID,
+            notes: transformedNotes
+        }))
+    },
     notes: [
     ],
     loading: false,
@@ -197,19 +263,21 @@ const useTodoStore = create<TodoStore>((set, get) => ({
         }
     },
     // Delete todo
-    deleteTodo: async (noteId, todoId) => {
+    deleteTodo: async (reqParentNoteId, reqName, reqId) => {
         set({ loading: true, error: null });
         try {
-            const response = await fetch(`/api/todos/${todoId}`, {
+            const response = await fetch(`/api/user/todos`, {
                 method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({reqParentNoteId, reqName, reqId }),
             });
             if (!response.ok) throw new Error('Failed to delete todo');
             set(state => ({
                 notes: state.notes.map(note => 
-                    note.id === noteId 
+                    note.id === reqParentNoteId 
                         ? { 
                             ...note, 
-                            todos: note.todos.filter(todo => todo.id !== todoId) 
+                            todos: note.todos.filter(todo => todo.id !== reqId) 
                         }
                         : note
                 ),

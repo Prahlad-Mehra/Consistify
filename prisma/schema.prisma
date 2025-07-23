@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../lib/generated/prisma"
@@ -23,11 +17,11 @@ model User {
 
 model Note {
   id                     Int                     @id @default(autoincrement())
-  user                   User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId                 Int //this is the id from the User model not the ClerkId from the user model
+  userId                 Int
   title                  String
   createdAt              DateTime                @default(now())
   completedCalendarDates CompletedCalendarDate[]
+  user                   User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
   todos                  Todo[]
 }
 
@@ -35,14 +29,14 @@ model Todo {
   id           Int      @id @default(autoincrement())
   parentNoteId Int
   name         String
-  note         Note     @relation(fields: [parentNoteId], references: [id], onDelete: Cascade)
   createdAt    DateTime @default(now())
   updateAt     String   @default("1999-12-30")
+  note         Note     @relation(fields: [parentNoteId], references: [id], onDelete: Cascade)
 }
 
 model CompletedCalendarDate {
   id         Int    @id @default(autoincrement())
   parentNote Int
-  note       Note   @relation(fields: [parentNote], references: [id], onDelete: Cascade)
   date       String
+  note       Note   @relation(fields: [parentNote], references: [id], onDelete: Cascade)
 }
