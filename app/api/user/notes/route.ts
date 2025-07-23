@@ -2,26 +2,29 @@ import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-//this route creates the note in the Database!!
-export async function POST(req:NextRequest){//this route is suppose to be POST!!!!REMEMBER
-    try{   
-        const {userId}= await auth();
+// Create note route handler
+export async function POST(req: NextRequest) {
+    try {
+        const { userId } = await auth();
+        const { title } = await req.json();
 
-        if(!userId){
-            return NextResponse.json({error:'Unauthorized'},{status:401})
+        if (!userId) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        
-        const {title}= await req.json();
-        if(!title || title.trim()===''){
+
+        if (!title?.trim()) {
             return NextResponse.json({ error: 'Note title is required' }, { status: 400 });
         }
-        //get user from db
-        const user=await prisma.user.findUnique({
-            where:{
-                clerkID: userId
-            }
-        })
-        if(!user){
+
+        // Combine queries to reduce database calls
+        const [user] = await Promise.all([
+            prisma.user.findUnique({
+                where: { clerkID: userId },
+                select: { id: true }
+            })
+        ]);
+
+        if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 

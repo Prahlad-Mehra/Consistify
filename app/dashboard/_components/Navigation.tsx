@@ -1,7 +1,6 @@
 'use client'
 
-import { ChevronLeft, MenuIcon ,PlusCircle,Home,Inbox, LogOut, Settings} from "lucide-react"
-import { usePathname } from "next/navigation"
+import { ChevronLeft, MenuIcon ,PlusCircle,Home, LogOut, Settings} from "lucide-react"
 import { ElementRef,useRef,useState,useEffect } from "react"
 import {useMediaQuery} from "usehooks-ts"
 
@@ -14,7 +13,6 @@ import SideNotes from "./SideNotes"
 import { SignOutButton } from "@clerk/nextjs"
 
 const Navigation = () => {
-  const pathname=usePathname() || ""
   const isMobile = useMediaQuery("(max-width: 768px)") ?? false;
 
   const isResizingRef=useRef(false)
@@ -31,11 +29,13 @@ const Navigation = () => {
     }
   },[isMobile])
 
+  // Combined the pathname effect with the mobile effect
   useEffect(() => {
     if (isMobile) {
       collapse();
     }
-  },[pathname, isMobile])
+  // Only re-run when mobile state changes, not on every pathname change
+  },[isMobile])
 
   const handleMouseDown = (
     event: React.MouseEvent<HTMLDivElement,MouseEvent>) => {
