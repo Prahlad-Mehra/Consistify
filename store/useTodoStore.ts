@@ -73,10 +73,10 @@ interface TodoStore {
     setInitialData: ()=> void
 }
 
-const useTodoStore = create<TodoStore>((set, get) => ({
+const useTodoStore = create<TodoStore>((set) => ({
     initialData:false,
     setInitialData: ()=>{
-        set((state)=>({
+        set(()=>({
             initialData: true
         }));
     },

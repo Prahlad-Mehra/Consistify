@@ -8,6 +8,9 @@ import { cn } from "@/lib/utils";
 import RealCalender from "../_components/RealCalender";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import MyPopover from "../_components/MyPopover";
+import MyTask from "../_components/MyTask";
+
 
 export default function Page() {
   const pathname = usePathname() || "";
@@ -18,6 +21,10 @@ export default function Page() {
   const slug = pathname.split("/").pop();
 
   const noteExists = notes.some(note => note.title === slug);
+
+  const isMobile = useMediaQuery("(max-width: 768px)") ?? false;
+  const addDate= useTodoStore(state => state.addDate)
+  const id:(number | undefined)= useTodoStore(state => state.notes.find(item => item.title===slug))?.id;
 
   useEffect(() => {
     if (pathname === "/dashboard/home") {
@@ -34,9 +41,7 @@ export default function Page() {
   }
 
   const note = notes.find(note => note.title === slug);
-  const isMobile = useMediaQuery("(max-width: 768px)") ?? false;
-  const addDate= useTodoStore(state => state.addDate)
-  const id:(number | undefined)= useTodoStore(state => state.notes.find(item => item.title===slug))?.id;
+  
 
   function done(){
     const today=new Date().toISOString().split('T')[0]
@@ -51,11 +56,14 @@ export default function Page() {
   return (
     <>
     <div className="flex justify-between mt-15 mx-10">
-      <div className="flex justify-center">
-        <pre className={cn(isMobile && "text-[10px]")}>
-          <h1 className="text-xl font-sans font-extrabold">{note?.title}</h1>
-        {JSON.stringify(note, null, 2)}
-      </pre>
+      <div className=" ml-15">
+        <h1 className="text-3xl mb-5 font-sans font-extrabold">{note?.title}</h1>
+        <MyPopover noteId={note.id}/>
+        <MyTask /> {/*complete this component!!!!*/}
+
+        <pre className={cn(isMobile && "text-[10px]")}> 
+          {JSON.stringify(note, null, 2)}
+        </pre>
       </div>
       <RealCalender id={note.id}/>
     </div>
