@@ -57,7 +57,7 @@ export default function Page() {
     <>
     <div className="flex justify-between mt-15 mx-10">
       <div className=" ml-15">
-        <h1 className="text-3xl mb-5 font-sans font-extrabold">{note?.title}</h1>
+        <h1 className="text-3xl mb-5 font-sans font-extrabold">{note?.title}</h1> 
         <MyPopover noteId={note.id}/>
         <MyTask /> {/*complete this component!!!!*/}
 
