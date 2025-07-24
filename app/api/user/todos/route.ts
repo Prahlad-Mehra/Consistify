@@ -1,14 +1,14 @@
-import { auth } from '@clerk/nextjs/server';
+// import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 export async function POST(req:NextRequest){//this should be a POST request!!!REMEMBER
     try{
-        const {userId}=await auth();
+        // const {userId}=await auth();
 
-        if(!userId){
-            return NextResponse.json({error:'Unauthorized'},{status:401});
-        }
+        // if(!userId){
+        //     return NextResponse.json({error:'Unauthorized'},{status:401});
+        // }
 
         const {reqParentNoteId,reqName}=await req.json();
         if(!reqParentNoteId || !reqName){
@@ -21,7 +21,7 @@ export async function POST(req:NextRequest){//this should be a POST request!!!RE
                 name:reqName
             }
         })
-        console.log(`✅ Created todo: ${reqName} for user ${userId}`);
+        // console.log(`✅ Created todo: ${reqName} for user ${userId}`);
         return NextResponse.json(todo,{status:201});
     } catch(error){
         console.error('Error creating todo',error);
@@ -38,17 +38,17 @@ interface updateTodo{
 
 export async function PUT(req:NextResponse){//this is for updating the (updateAt) in the db for storing the last done date of that todo
     try{
-        const {userId}=await auth();
-        if(!userId){
-            return NextResponse.json({error:'Unauthorized'},{status:401});
-        }
+        // const {userId}=await auth();
+        // if(!userId){
+        //     return NextResponse.json({error:'Unauthorized'},{status:401});
+        // }
         const {reqParentNoteId,reqName,reqId , updateItToToday}:updateTodo =await req.json();
         if(!reqParentNoteId || !reqName){
             return NextResponse.json({ error: 'Invalid request!!' }, { status: 400 });
         }
         //update the todo's updateAt state to the latest since this route method is just for doing that
         //main prisma/DB logic down here for updating the todo's state
-        const updatedTodo=await prisma.todo.update({
+        const updatedTodo = await prisma.todo.update({
             where:{
                 id:reqId,
                 parentNoteId:reqParentNoteId,
@@ -57,10 +57,10 @@ export async function PUT(req:NextResponse){//this is for updating the (updateAt
             data:{
                 updateAt: updateItToToday
             }
-        })
+        });
         //logic ends here
-        console.log(`updated the todo`);
-        return NextResponse.json(updatedTodo,{status:204});
+        console.log(`updated the todo `);
+        return NextResponse.json(updatedTodo, { status: 200 });
 
     } catch(error){
         console.error('Error updating todo',error);
@@ -70,10 +70,10 @@ export async function PUT(req:NextResponse){//this is for updating the (updateAt
 
 export async function DELETE(req:NextResponse){
     try{
-       const {userId}=await auth();
-        if(!userId){
-            return NextResponse.json({error:'Unauthorized'},{status:401});
-        }
+    //    const {userId}=await auth();
+    //     if(!userId){
+    //         return NextResponse.json({error:'Unauthorized'},{status:401});
+    //     }
         const {reqParentNoteId,reqName,reqId}:updateTodo =await req.json();
         if(!reqParentNoteId || !reqName){
             return NextResponse.json({ error: 'Invalid request!!' }, { status: 400 });
