@@ -30,7 +30,7 @@ function MyPopover({noteId}:popProp) {
     };
 
     return (
-        <>
+        <div className="mb-4">
             <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                 <PopoverTrigger asChild>
                     <Button variant="outline" className="cursor-pointer text-zinc-700">Add Task</Button>
@@ -66,7 +66,7 @@ function MyPopover({noteId}:popProp) {
                     </div>
                 </PopoverContent>
             </Popover>
-        </>
+        </div>
     )
 }
 

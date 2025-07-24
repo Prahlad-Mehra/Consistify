@@ -6,8 +6,8 @@ import useTodoStore from "@/store/useTodoStore";
 import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import RealCalender from "../_components/RealCalender";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+// import { Button } from "@/components/ui/button";
+// import { toast } from "sonner";
 import MyPopover from "../_components/MyPopover";
 import MyTask from "../_components/MyTask";
 
@@ -23,8 +23,8 @@ export default function Page() {
   const noteExists = notes.some(note => note.title === slug);
 
   const isMobile = useMediaQuery("(max-width: 768px)") ?? false;
-  const addDate= useTodoStore(state => state.addDate)
-  const id:(number | undefined)= useTodoStore(state => state.notes.find(item => item.title===slug))?.id;
+  // const addDate= useTodoStore(state => state.addDate)
+  // const id:(number | undefined)= useTodoStore(state => state.notes.find(item => item.title===slug))?.id;
 
   useEffect(() => {
     if (pathname === "/dashboard/home") {
@@ -41,13 +41,6 @@ export default function Page() {
   }
 
   const note = notes.find(note => note.title === slug);
-  
-
-  function done(){
-    const today=new Date().toISOString().split('T')[0]
-    addDate(today,id!)
-    toast.success(`Congratulation on completing today's task`)
-  }
   if(!note || !note.id){
     return <>
       Error in loading please refresh again.
@@ -59,7 +52,7 @@ export default function Page() {
       <div className=" ml-15">
         <h1 className="text-3xl mb-5 font-sans font-extrabold">{note?.title}</h1> 
         <MyPopover noteId={note.id}/>
-        <MyTask /> {/*complete this component!!!!*/}
+        <MyTask CurrNote={note} /> {/*complete this component!!!!*/}
 
         <pre className={cn(isMobile && "text-[10px]")}> 
           {JSON.stringify(note, null, 2)}
@@ -67,7 +60,6 @@ export default function Page() {
       </div>
       <RealCalender id={note.id}/>
     </div>
-    <Button className="cursor-pointer" onClick={done}>Done</Button>
     </>
   )
 }

@@ -31,7 +31,7 @@ interface EnsureTodo{
     parentNoteId:number;
     name: string;
     createdAt: string;
-    updatedAt: string;
+    updateAt: string;
 }
 interface EnsureNote{
     id:number;
@@ -70,10 +70,47 @@ interface TodoStore {
     // UI helpers
     clearError: () => void;
     initialData: boolean;
-    setInitialData: ()=> void
+    setInitialData: ()=> void;
+    setCalendarDate: (Currid:number,parentNoteId:number,today:string)=> Promise<void>
+
 }
 
 const useTodoStore = create<TodoStore>((set) => ({
+    setCalendarDate: async (Currid:number,parentNoteId:number,today:string) =>{
+        try{
+            const updatedDate = await fetch('/api/user/calendarDates', {
+                method: 'GET',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({id: Currid, parentNote: parentNoteId, date: today})
+            });
+            if (!updatedDate.ok){
+                throw new Error('Failed to update calendar date');
+            } 
+            const result = await updatedDate.json();
+            console.log(`Updated calendar date: ${result.date} for note ID: ${parentNoteId}`);
+            // Update the state with the new calendar date
+            
+
+            set(state => ({
+            notes: state.notes.map((note: Note) =>
+                note.id === parentNoteId
+                    ? {
+                        ...note,
+                        calendarDates: [
+                            ...note.calendarDates,{
+                                id: result.id,
+                                parentNote: parentNoteId,
+                                date: result.date
+                            }],
+                    }
+                    : note
+            )
+        }));
+        } catch(error){
+            console.error('Error while setting calendar date', error);
+        }
+        
+    },
     initialData:false,
     setInitialData: ()=>{
         set(()=>({
@@ -92,7 +129,7 @@ const useTodoStore = create<TodoStore>((set) => ({
               id: todo.id,
               parentNoteId: todo.parentNoteId,
               name: todo.name,
-              updateAt: todo.updatedAt,
+              updateAt: todo.updateAt,
             })),
             calendarDates: note.completedCalendarDates.map(date => ({
               id: date.id,
@@ -231,7 +268,7 @@ const useTodoStore = create<TodoStore>((set) => ({
         set({ loading: true, error: null });
         try {
             const response = await fetch(`/api/user/todos`, {
-                method: 'POST',
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({reqParentNoteId, reqName, reqId, updateItToToday }),
             });
