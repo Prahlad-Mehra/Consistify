@@ -31,6 +31,8 @@ const NoteButton = memo(({ noteTitle }: { noteTitle: string }) => {
   );
 });
 
+NoteButton.displayName = 'NoteButton';
+
 export default function SideNotes() {
   // Use shallow comparison to avoid infinite re-renders
   const notes = useTodoStore(state => state.notes);

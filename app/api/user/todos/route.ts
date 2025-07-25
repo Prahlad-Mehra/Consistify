@@ -1,15 +1,8 @@
-// import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 export async function POST(req:NextRequest){//this should be a POST request!!!REMEMBER
     try{
-        // const {userId}=await auth();
-
-        // if(!userId){
-        //     return NextResponse.json({error:'Unauthorized'},{status:401});
-        // }
-
         const {reqParentNoteId,reqName}=await req.json();
         if(!reqParentNoteId || !reqName){
             return NextResponse.json({ error: 'Invalid request!!' }, { status: 400 });
@@ -21,7 +14,6 @@ export async function POST(req:NextRequest){//this should be a POST request!!!RE
                 name:reqName
             }
         })
-        // console.log(`✅ Created todo: ${reqName} for user ${userId}`);
         return NextResponse.json(todo,{status:201});
     } catch(error){
         console.error('Error creating todo',error);
@@ -36,12 +28,8 @@ interface updateTodo{
     updateItToToday:string
 }
 
-export async function PUT(req:NextResponse){//this is for updating the (updateAt) in the db for storing the last done date of that todo
+export async function PUT(req:NextRequest){//this is for updating the (updateAt) in the db for storing the last done date of that todo
     try{
-        // const {userId}=await auth();
-        // if(!userId){
-        //     return NextResponse.json({error:'Unauthorized'},{status:401});
-        // }
         const {reqParentNoteId,reqName,reqId , updateItToToday}:updateTodo =await req.json();
         if(!reqParentNoteId || !reqName){
             return NextResponse.json({ error: 'Invalid request!!' }, { status: 400 });
@@ -68,12 +56,8 @@ export async function PUT(req:NextResponse){//this is for updating the (updateAt
     }
 }
 
-export async function DELETE(req:NextResponse){
+export async function DELETE(req:NextRequest){
     try{
-    //    const {userId}=await auth();
-    //     if(!userId){
-    //         return NextResponse.json({error:'Unauthorized'},{status:401});
-    //     }
         const {reqParentNoteId,reqName,reqId}:updateTodo =await req.json();
         if(!reqParentNoteId || !reqName){
             return NextResponse.json({ error: 'Invalid request!!' }, { status: 400 });
@@ -90,6 +74,6 @@ export async function DELETE(req:NextResponse){
         return NextResponse.json(del,{status:200});
     } catch(error){
         console.error('Error deleting todo',error);
-        return NextResponse.json({error:'Internla server error'},{status:500});
+        return NextResponse.json({error:'Internal server error'},{status:500});
     }
 }

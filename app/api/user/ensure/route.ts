@@ -2,7 +2,7 @@ import { auth , currentUser} from "@clerk/nextjs/server"
 import {NextResponse,NextRequest} from "next/server";
 import prisma from "@/lib/prisma";
 
-export async function GET(req:NextRequest){//this should be a POST request!!!! REMEMBER
+export async function GET(){//this should be a POST request!!!! REMEMBER
     try{
         const { userId } = await auth();
         const reqCurrentUser = await currentUser();
@@ -44,7 +44,7 @@ export async function GET(req:NextRequest){//this should be a POST request!!!! R
             })
             console.log(`✅ created user ${userId}`)
 
-            return await prisma.user.findUnique({
+             const createdUserWithNotes = await prisma.user.findUnique({
                 where:{id:newUser.id},
                 include:{
                     notes:{
@@ -54,7 +54,9 @@ export async function GET(req:NextRequest){//this should be a POST request!!!! R
                         }
                     }
                 }
-            })
+            });
+
+            return NextResponse.json(createdUserWithNotes);
         }
         else{
             console.log(`✅User already exist`)

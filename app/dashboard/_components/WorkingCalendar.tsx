@@ -2,7 +2,7 @@ import { Check, Flame, Trophy, Target } from 'lucide-react';
 import useTodoStore from '@/store/useTodoStore';
 
 interface dates{
-    date: String
+    date: string
 }
 
 interface WorkingCalendarProps {
@@ -42,7 +42,7 @@ const WorkingCalendar = ({id}:WorkingCalendarProps)=> {
       console.log(a)
       return a;
     }
-    let Streak:number=streak()
+    const Streak:number=streak();
 
     return (
         <div className="w-90 lg:w-80 bg-white rounded-xl shadow-2xl border border-gray-200 p-4 mx-5">

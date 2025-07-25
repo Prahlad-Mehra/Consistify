@@ -3,8 +3,7 @@
 import { LucideIcon , Trash2} from "lucide-react";
 import Link from "next/link";
 import useTodoStore from "../../../store/useTodoStore";
-import { usePathname, useRouter } from "next/navigation"; // Adjust the import path as necessary
-import { title } from "process";
+import { useRouter } from "next/navigation"; // Adjust the import path as necessary
 
 interface SideItemsProps {
     icon?:LucideIcon;
@@ -20,7 +19,6 @@ function SideItems({
     label,
     href,
     noteId,
-    del,
     onClick
 }: SideItemsProps) {
   const router = useRouter();

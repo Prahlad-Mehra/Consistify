@@ -1,7 +1,7 @@
 'use client'
 
 import { ChevronLeft, MenuIcon ,PlusCircle,Home, LogOut, Settings} from "lucide-react"
-import { ElementRef,useRef,useState,useEffect } from "react"
+import { ElementRef,useRef,useState,useEffect, useCallback } from "react"
 import {useMediaQuery} from "usehooks-ts"
 
 import { cn } from "@/lib/utils"
@@ -20,6 +20,31 @@ const Navigation = () => {
   const navbarRef=useRef<ElementRef<"div">>(null)
   const [isResetting,setIsResetting]= useState(false)
   const [isCollapsed,setIsCollapsed]= useState(isMobile)
+
+  const resetWidth =/*useCallback(*/()=>{
+    
+    // () => {
+    if (sidebarRef.current && navbarRef.current) {
+      setIsResetting(true);
+      setIsCollapsed(false);
+
+      sidebarRef.current.style.width = isMobile ? "100%" : "240px";
+      navbarRef.current.style.setProperty(
+        "left",
+        isMobile ? "100%" : "240px"
+      );
+      navbarRef.current.style.setProperty(
+        "width",
+        isMobile ? "0" : "calc(100% - 240px)"
+      );
+
+      setTimeout(() => setIsResetting(false), 300);
+    }
+  }
+  // }
+
+
+  // },[])
 
   useEffect(() => {
     if(isMobile){
@@ -67,24 +92,7 @@ const Navigation = () => {
     document.removeEventListener("mouseup", handleMouseUp);
   }
 
-  const resetWidth = () => {
-    if (sidebarRef.current && navbarRef.current) {
-      setIsResetting(true);
-      setIsCollapsed(false);
-
-      sidebarRef.current.style.width = isMobile ? "100%" : "240px";
-      navbarRef.current.style.setProperty(
-        "left",
-        isMobile ? "100%" : "240px"
-      );
-      navbarRef.current.style.setProperty(
-        "width",
-        isMobile ? "0" : "calc(100% - 240px)"
-      );
-
-      setTimeout(() => setIsResetting(false), 300);
-    }
-  }
+   
 
   const collapse = () => {
     if (sidebarRef.current && navbarRef.current) {
